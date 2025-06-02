@@ -1,4 +1,5 @@
-import math
+from metodos.solucion_analitica import solucion_analitica_lineal
+
 
 """
 Sistema lineal (modelo base):
@@ -59,38 +60,25 @@ x(t) = e^(-(5 t)/2) (0.01 cos((5 sqrt(15) t)/2) + 0.105862 sin((5 sqrt(15) t)/2)
 
 """
 
-
-def solucion_analitica(t):
-        return math.exp(-2.5 * t) * (0.01 * math.cos(5 * math.sqrt(15) / 2 * t) + 0.105862 * math.sin(5 * math.sqrt(15) / 2 * t))
-
-def f2(u, v, c, k, m):
-    return (-c * v - k * u) / m
-
-def RK2(m, c, k, h, u_0, v_0, t_final):
+def RK2(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_RK2.txt"):
+    def f2(u, v, c, k, m):
+        return (-c * v - k * u) / m
     n = int(t_final / h)
     u_n = u_0
     v_n = v_0
-
-    with open("resultados_RK2.txt", "w") as f:
+    with open(resultado_file, "w") as f:
         header = f"{'n':>3} {'t':>8} {'u^n':>12} {'v^n':>12} {'u^(n+1)':>12} {'v^(n+1)':>12} {'y(t)':>14} {'error':>12}"
         f.write(header + "\n")
-
         for i in range(n):
             t = h * i
-
-            # PASO PREDICTOR
+            # Predictor
             u_pred = u_n + h * v_n
             v_pred = v_n + h * f2(u_n, v_n, c, k, m)
-
-            # PASO CORRECTOR
+            # Corrector
             u_n1 = u_n + (h / 2) * (v_n + v_pred)
             v_n1 = v_n + (h / 2) * (f2(u_n, v_n, c, k, m) + f2(u_pred, v_pred, c, k, m))
-
-            #SOL ANALITICA
-            y_t = solucion_analitica(t)
+            y_t = solucion_analitica_lineal(t)
             error = u_n - y_t
-
-            #RESULTADOS
             f.write(f"{i:3d} {t:8.4f} {u_n:12.6f} {v_n:12.6f} {u_n1:12.6f} {v_n1:12.6f} {y_t:14.6f} {error:12.6e}\n")
             u_n = u_n1
             v_n = v_n1
