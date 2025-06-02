@@ -45,8 +45,8 @@ def main():
 
     # EULER EXPLICITO & RK2
 
-    #metodo, nombre_metodo = euler_explicito,"Euler Explicito"
-    metodo, nombre_metodo = RK2,"RK2"
+    metodo, nombre_metodo = euler_explicito,"Euler Explicito"
+    #metodo, nombre_metodo = RK2,"RK2"
 
     g.graficar_comparacion_h(metodo, hs, m, c, k, u_0, v_0, t_final_1, nombre_metodo)
     g.graficar_comparacion_h(metodo, hs, m, c, k, u_0, v_0, t_final_2, nombre_metodo)
