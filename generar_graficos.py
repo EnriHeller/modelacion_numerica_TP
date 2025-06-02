@@ -1,21 +1,10 @@
 import matplotlib.pyplot as plt
-from euler_explicito import euler_explicito, solucion_analitica
 import numpy as np
 
-def leer_resultados(filename):
-    ts = []
-    us = []
-    with open(filename) as f:
-        next(f)
-        for line in f:
-            if line.strip() == '':
-                continue
-            parts = line.split()
-            ts.append(float(parts[1]))
-            us.append(float(parts[2]))
-    return np.array(ts), np.array(us)
+from metodos.euler_explicito import euler_explicito
 
-def graficar_comparacion_h(hs, m, c, k, u_0, v_0, t_final):
+
+def graficar_euler_comparacion_h(hs, m, c, k, u_0, v_0, t_final):
     plt.figure(figsize=(12,6))
     for h in hs:
         euler_explicito(m, c, k, h, u_0, v_0, t_final)
@@ -67,20 +56,7 @@ def graficar_euler_error():
             errores.append(error)
             max_error = max(max_error, error)
             error_global.append(max_error)
-            
-    # Solución numérica vs analítica
-    """plt.figure(figsize=(12,6))
-    plt.plot(ts, u_num, label='Solución numérica (Euler)', marker='o', markersize=7, linewidth=2)
-    plt.plot(ts, u_ana, label='Solución analítica', linestyle='--', linewidth=2)
-    plt.xlabel('t', fontsize=14)
-    plt.ylabel('u(t)', fontsize=14)
-    plt.title('Comparación: Solución numérica vs. analítica', fontsize=16)
-    plt.legend(fontsize=12)
-    plt.grid(True, which='both', linestyle='--', linewidth=0.7)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.tight_layout()
-    plt.show()"""
+        
     
     # Solución numérica vs analítica (puntos unidos por línea entrecortada)
     plt.figure(figsize=(12,6))
@@ -96,27 +72,57 @@ def graficar_euler_error():
     plt.tight_layout()
     plt.show()
 
-    """
-    # Error absoluto
-    plt.figure(figsize=(12,6))
-    plt.plot(ts, errores, label='Error absoluto |u_num - u_ana|', color='red', linewidth=2, marker='o', markersize=7)
-    plt.xlabel('t', fontsize=14)
-    plt.ylabel('Error absoluto', fontsize=14)
-    plt.title('Error absoluto entre solución numérica y analítica', fontsize=16)
-    plt.legend(fontsize=12)
-    plt.grid(True, which='both', linestyle='--', linewidth=0.7)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.tight_layout()
-    plt.show()
-    """
-
     # Error global solo con puntos
     plt.figure(figsize=(12,6))
     plt.plot(ts, error_global, 'o', label='Error global hasta t', color='blue', markersize=7)
     plt.xlabel('t', fontsize=14)
     plt.ylabel('Error global', fontsize=14)
     plt.title('Error global respecto al tiempo', fontsize=16)
+    plt.legend(fontsize=12)
+    plt.grid(True, which='both', linestyle='--', linewidth=0.7)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout()
+    plt.show()
+
+def graficar_solucion_analitica(solucion_analitica, t_final, n_puntos=200):
+    ts = np.linspace(0, t_final, n_puntos)
+    us = [solucion_analitica(t) for t in ts]
+    plt.figure(figsize=(10,5))
+    plt.plot(ts, us, label='Solución analítica', color='black', linewidth=2)
+    plt.xlabel('t', fontsize=14)
+    plt.ylabel('y(t)', fontsize=14)
+    plt.title('Solución analítica', fontsize=16)
+    plt.legend(fontsize=12)
+    plt.grid(True, which='both', linestyle='--', linewidth=0.7)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout()
+    plt.show()
+
+def graficar_RK2_comparacion_h(hs, m, c, k, u_0, v_0, t_final):
+    plt.figure(figsize=(12,6))
+    from metodos.RK2 import RK2
+    for h in hs:
+        RK2(m, c, k, h, u_0, v_0, t_final)
+        ts = []
+        errores = []
+        with open("resultados_RK2.txt") as f:
+            next(f)
+            for line in f:
+                if line.strip() == '':
+                    continue
+                parts = line.split()
+                t = float(parts[1])
+                u_n = float(parts[2])
+                u_analitica = float(parts[6])
+                error = u_n - u_analitica
+                ts.append(t)
+                errores.append(error)
+        plt.plot(ts, errores, 'o--', label=f'Error global RK2 h={h}', markersize=6)
+    plt.xlabel('t', fontsize=14)
+    plt.ylabel('Error global $E^n = u^n - y(t^n)$', fontsize=14)
+    plt.title('Comparación de error global RK2 para distintos h', fontsize=16)
     plt.legend(fontsize=12)
     plt.grid(True, which='both', linestyle='--', linewidth=0.7)
     plt.xticks(fontsize=12)
