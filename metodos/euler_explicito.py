@@ -47,11 +47,16 @@ x(t) = e^(-(5 t)/2) (0.01 cos((5 sqrt(15) t)/2) + 0.105862 sin((5 sqrt(15) t)/2)
 
 """
 
-def euler_explicito(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_euler.txt"):
+def euler_explicito(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_euler.txt", caso=None):
+    import os
+    # Redirigir resultados a la carpeta corridas_numericas/sin_revisar
+    base_dir = "corridas_numericas/sin_revisar"
+    os.makedirs(base_dir, exist_ok=True)
+    resultado_file = os.path.join(base_dir, os.path.basename(resultado_file))
 
     n = int(t_final/h)
     u_n = u_0
-    v_n= v_0
+    v_n = v_0
 
     with open(resultado_file, "w") as f:
         header = f"{'n':>3} {'t':>8} {'u^n':>12} {'v^n':>12} {'u^(n+1)':>12} {'v^(n+1)':>12} {'y(t)':>14} {'error':>12}"
@@ -60,7 +65,7 @@ def euler_explicito(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_eu
             t = h * i
             u_n1 = u_n + h * v_n
             v_n1 = v_n + h / m * (-c * v_n - k * u_n)
-            y_t = solucion_analitica_lineal(t)
+            y_t = solucion_analitica_lineal(t, caso)
             error = u_n - y_t
             f.write(f"{i:3d} {t:8.4f} {u_n:12.6f} {v_n:12.6f} {u_n1:12.6f} {v_n1:12.6f} {y_t:14.6f} {error:12.6e}\n")
             u_n = u_n1
