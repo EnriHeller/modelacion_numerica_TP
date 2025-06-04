@@ -1,6 +1,7 @@
 import generar_graficos as g
 from metodos.euler_explicito import euler_explicito
 from metodos.RK2 import RK2
+from metodos.solucion_analitica import solucion_analitica_lineal
 
 
 def main():
@@ -13,11 +14,7 @@ def main():
     k = 100
     """
     
-
-
     ## Z = 1
-    
-    
     """
     m = 0.1
     c = 0.55
@@ -25,9 +22,11 @@ def main():
     """
 
     ## Z > 1 -> Z = sqrt(5)
+    """
     m = 10
     c = 10
     k = 0.5
+    """
     
     ##CONSTANTES
     u_0 = 10 **-2
@@ -39,16 +38,27 @@ def main():
 
     ## EJECUCION
 
-    #Solucion analitica lineal
-    #g.graficar_solucion_analitica(e.solucion_analitica, 10, 200)
-
+    
 
     # EULER EXPLICITO & RK2
+    # Ejemplo para Z > 1 -> Z = sqrt(5)
+    m = 10
+    c = 10
+    k = 0.5
 
-    metodo, nombre_metodo = euler_explicito,"Euler Explicito"
-    #metodo, nombre_metodo = RK2,"RK2"
 
-    g.graficar_comparacion_h(metodo, hs, m, c, k, u_0, v_0, t_final_1, nombre_metodo)
-    g.graficar_comparacion_h(metodo, hs, m, c, k, u_0, v_0, t_final_2, nombre_metodo)
+    ##Constantes
+    u_0 = 10 **-2
+    v_0 = 1
+    hs = [0.1, 0.05, 0.025]
+    t_final_1 = 0.5
+    t_final_2 = 2
+
+
+    #Solucion analitica lineal
+    g.graficar_solucion_analitica(solucion_analitica_lineal, 10, 200)
+    g.graficar_comparacion_h(euler_explicito, hs, m, c, k, u_0, v_0, t_final_1, "Euler explícito")
+
+    g.graficar_comparacion_h(RK2, hs, m, c, k, u_0, v_0, t_final_2, "RK2")
 
 main()
