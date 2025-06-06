@@ -60,15 +60,15 @@ x(t) = e^(-(5 t)/2) (0.01 cos((5 sqrt(15) t)/2) + 0.105862 sin((5 sqrt(15) t)/2)
 
 """
 
-def RK2(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_RK2.txt", caso=None):
+def RK2(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_RK2.txt", caso=None, alpha=0.0):
     import os
     # Redirigir resultados a la carpeta corridas_numericas/sin_revisar
     base_dir = "corridas_numericas/sin_revisar"
     os.makedirs(base_dir, exist_ok=True)
     resultado_file = os.path.join(base_dir, os.path.basename(resultado_file))
 
-    def f2(u, v, c, k, m):
-        return (-c * v - k * u) / m
+    def f2(u, v, c, k, m, alpha):
+        return (-c * v - k * u - alpha * u**3) / m
     n = int(t_final / h)
     u_n = u_0
     v_n = v_0
@@ -79,11 +79,11 @@ def RK2(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_RK2.txt", caso
             t = h * i
             # Predictor
             u_pred = u_n + h * v_n
-            v_pred = v_n + h * f2(u_n, v_n, c, k, m)
+            v_pred = v_n + h * f2(u_n, v_n, c, k, m, alpha)
             # Corrector
             u_n1 = u_n + (h / 2) * (v_n + v_pred)
-            v_n1 = v_n + (h / 2) * (f2(u_n, v_n, c, k, m) + f2(u_pred, v_pred, c, k, m))
-            y_t = solucion_analitica_lineal(t, caso)
+            v_n1 = v_n + (h / 2) * (f2(u_n, v_n, c, k, m, alpha) + f2(u_pred, v_pred, c, k, m, alpha))
+            y_t = solucion_analitica_lineal(t, caso) if alpha == 0 else 0.0  # No hay solución analítica para alpha != 0
             error = u_n - y_t
             f.write(f"{i:3d} {t:8.4f} {u_n:12.6f} {v_n:12.6f} {u_n1:12.6f} {v_n1:12.6f} {y_t:14.6f} {error:12.6e}\n")
             u_n = u_n1

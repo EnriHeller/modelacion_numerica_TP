@@ -47,7 +47,7 @@ x(t) = e^(-(5 t)/2) (0.01 cos((5 sqrt(15) t)/2) + 0.105862 sin((5 sqrt(15) t)/2)
 
 """
 
-def euler_explicito(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_euler.txt", caso=None):
+def euler_explicito(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_euler.txt", caso=None, alpha=0.0):
     import os
     # Redirigir resultados a la carpeta corridas_numericas/sin_revisar
     base_dir = "corridas_numericas/sin_revisar"
@@ -64,8 +64,9 @@ def euler_explicito(m, c, k, h, u_0, v_0, t_final, resultado_file="resultados_eu
         for i in range(n):
             t = h * i
             u_n1 = u_n + h * v_n
-            v_n1 = v_n + h / m * (-c * v_n - k * u_n)
-            y_t = solucion_analitica_lineal(t, caso)
+            # Modificación: agregar término no lineal -alpha * u_n**3
+            v_n1 = v_n + h / m * (-c * v_n - k * u_n - alpha * u_n**3)
+            y_t = solucion_analitica_lineal(t, caso) if alpha == 0 else 0.0  # No hay solución analítica para alpha != 0
             error = u_n - y_t
             f.write(f"{i:3d} {t:8.4f} {u_n:12.6f} {v_n:12.6f} {u_n1:12.6f} {v_n1:12.6f} {y_t:14.6f} {error:12.6e}\n")
             u_n = u_n1

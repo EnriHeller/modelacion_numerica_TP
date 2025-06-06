@@ -31,7 +31,9 @@ def graficar_comparacion_h(metodo, hs, m, c, k, u_0, v_0, t_final, nombre_metodo
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.tight_layout()
+    plt.savefig(f"grafico_error_{nombre_metodo}_caso{caso}.png")  # Guarda el gráfico
     plt.show()
+    plt.close()
 
 def graficar_solucion_analitica(solucion_analitica, caso, t_final, n_puntos=200):
     ts = np.linspace(0, t_final, n_puntos)
@@ -46,7 +48,9 @@ def graficar_solucion_analitica(solucion_analitica, caso, t_final, n_puntos=200)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.tight_layout()
+    plt.savefig(f"grafico_analitica_caso{caso}.png")  # Guarda el gráfico
     plt.show()
+    plt.close()
 
 def graficar_comparacion_soluciones(solucion_analitica, metodo, hs, m, c, k, u_0, v_0, t_final, caso, n_puntos=200, ylim=None, xlim=None):
     ts = np.linspace(0, t_final, n_puntos)
@@ -83,7 +87,9 @@ def graficar_comparacion_soluciones(solucion_analitica, metodo, hs, m, c, k, u_0
         plt.ylim(ylim)
     if xlim is not None:
         plt.xlim(xlim)
+    plt.savefig(f"grafico_comparacion_{metodo.__name__}_caso{caso}.png")  # Guarda el gráfico
     plt.show()
+    plt.close()
 
 
 
