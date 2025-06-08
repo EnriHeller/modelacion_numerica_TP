@@ -56,15 +56,17 @@ def main():
     u_0 = 10 ** -2
     v_0 = 1
     """ hs = [0.1, 0.05, 0.025] """ #hs de c1
-    hs = [1.05,2.1,4.2] #hs de c2
+    #hs = [1.05,2.1,4.2] #hs de c2
+    hs = [0.5,1,0.25] #hs de c2
+
     t_finales = [0.5, 2, 5, 10]
 
     #comparacion_funciones(casos,10,hs,u_0,v_0)
     #comparacion_errores(casos,t_finales,hs,u_0,v_0)
     # --- NUEVO: Euler explícito no lineal modularizado ---
-    alpha = -2  # Cambia este valor para probar distintos alphas
-    caso = 3
-    t_final = 15
+    alpha = -10  # Cambia este valor para probar distintos alphas
+    caso = 2
+    t_final = 5
     euler_no_lineal_modular(casos, caso, hs, t_final, u_0, v_0, alpha)
 
 main()
