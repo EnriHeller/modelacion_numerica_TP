@@ -32,6 +32,19 @@ def comparacion_errores(casos,t_finales,hs,u_0,v_0):
             g.graficar_comparacion_h(euler_explicito, hs, m, c, k, u_0, v_0, t_final, f"Euler explícito - t_final={t_final}", caso)
             g.graficar_comparacion_h(RK2, hs, m, c, k, u_0, v_0, t_final, f"RK2- t_final={t_final}", caso)
 
+def euler_no_lineal_modular(casos, caso, hs, t_final, u_0, v_0, alpha):
+    from parte2.euler_no_lineal import euler_explicito_no_lineal, graficar_no_lineal_multi_h
+    resultados = {}
+    m = casos[caso]['m']
+    c = casos[caso]['c']
+    k = casos[caso]['k']
+    for h in hs:
+        resultado_file = f"parte2/resultados_euler_no_lineal_caso{caso}_h{h}_alpha_{str(alpha).replace('.', 'p').replace('-', 'm')}.txt"
+        ts, us = euler_explicito_no_lineal(m, c, k, h, u_0, v_0, t_final, alpha, resultado_file)
+        resultados[h] = (ts, us)
+    nombre_grafico = f"parte2/grafico_no_lineal_caso{caso}_alpha_{str(alpha).replace('.', 'p').replace('-', 'm')}.png"
+    graficar_no_lineal_multi_h(resultados, alpha, caso, nombre_grafico)
+
 def main():
     # Definición de los casos
     casos = {
@@ -41,10 +54,16 @@ def main():
     }
     u_0 = 10 ** -2
     v_0 = 1
-    hs = [0.1, 0.05, 0.025]
+    """ hs = [0.1, 0.05, 0.025] """ #hs de c1
+    hs = [0.01,0.05,0.1] #hs de c2
     t_finales = [0.5, 2, 5, 10]
 
     #comparacion_funciones(casos,10,hs,u_0,v_0)
-    comparacion_errores(casos,t_finales,hs,u_0,v_0)
+    #comparacion_errores(casos,t_finales,hs,u_0,v_0)
+    # --- NUEVO: Euler explícito no lineal modularizado ---
+    alpha = 500  # Cambia este valor para probar distintos alphas
+    caso = 2
+    t_final = 1
+    euler_no_lineal_modular(casos, caso, hs, t_final, u_0, v_0, alpha)
 
 main()
