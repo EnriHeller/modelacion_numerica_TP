@@ -2,6 +2,7 @@ import generar_graficos as g
 from metodos.euler_explicito import euler_explicito
 from metodos.RK2 import RK2
 from metodos.solucion_analitica import solucion_analitica_lineal
+from parte2.euler_no_lineal import euler_explicito_no_lineal, graficar_no_lineal_multi_h
 
 def comparacion_funciones(casos,t_final,hs,u_0,v_0):
     puntos = 200
@@ -33,7 +34,7 @@ def comparacion_errores(casos,t_finales,hs,u_0,v_0):
             g.graficar_comparacion_h(RK2, hs, m, c, k, u_0, v_0, t_final, f"RK2- t_final={t_final}", caso)
 
 def euler_no_lineal_modular(casos, caso, hs, t_final, u_0, v_0, alpha):
-    from parte2.euler_no_lineal import euler_explicito_no_lineal, graficar_no_lineal_multi_h
+    
     resultados = {}
     m = casos[caso]['m']
     c = casos[caso]['c']
@@ -55,15 +56,15 @@ def main():
     u_0 = 10 ** -2
     v_0 = 1
     """ hs = [0.1, 0.05, 0.025] """ #hs de c1
-    hs = [0.01,0.05,0.1] #hs de c2
+    hs = [1.05,2.1,4.2] #hs de c2
     t_finales = [0.5, 2, 5, 10]
 
     #comparacion_funciones(casos,10,hs,u_0,v_0)
     #comparacion_errores(casos,t_finales,hs,u_0,v_0)
     # --- NUEVO: Euler explícito no lineal modularizado ---
-    alpha = 500  # Cambia este valor para probar distintos alphas
-    caso = 2
-    t_final = 1
+    alpha = -2  # Cambia este valor para probar distintos alphas
+    caso = 3
+    t_final = 15
     euler_no_lineal_modular(casos, caso, hs, t_final, u_0, v_0, alpha)
 
 main()

@@ -33,6 +33,7 @@ def graficar_no_lineal(ts, us, alpha, caso, nombre_archivo="grafico_no_lineal.pn
     plt.title(f'Solución numérica no lineal (caso {caso}, alpha={alpha})', fontsize=16)
     plt.legend(fontsize=12)
     plt.grid(True, which='both', linestyle='--', linewidth=0.7)
+    #plt.ylim(0,0.10)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.tight_layout()
